@@ -1,40 +1,39 @@
 <template>
     <ion-tabs>
         <ion-router-outlet></ion-router-outlet>
-        <ion-tab-bar slot="bottom">
-            <ion-tab-button tab="tab1" href="/home">
-                <ion-icon :icon="triangle" />
-                <ion-label>Home</ion-label>
+        <ion-tab-bar v-if="isAdmin" slot="bottom">
+            <ion-tab-button tab="tab1" href="/report">
+                <ion-icon :icon="downloadOutline" />
+                <ion-label>Report</ion-label>
             </ion-tab-button>
 
-            <ion-tab-button tab="tab2" href="/about">
-                <ion-icon :icon="ellipse" />
-                <ion-label>About</ion-label>
+            <ion-tab-button tab="tab2" href="/user">
+                <ion-icon :icon="peopleOutline" />
+                <ion-label>User</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+        <ion-tab-bar v-else slot="bottom">
+            <ion-tab-button tab="tab1" href="/attendance">
+                <ion-icon :icon="timeOutline" />
+                <ion-label>Attendance</ion-label>
             </ion-tab-button>
 
-            <ion-tab-button tab="tab3" href="/anythings">
-                <ion-icon :icon="square" />
-                <ion-label>Anythings</ion-label>
+            <ion-tab-button tab="tab2" href="/profile">
+                <ion-icon :icon="peopleCircleOutline" />
+                <ion-label>Profile</ion-label>
             </ion-tab-button>
         </ion-tab-bar>
     </ion-tabs>
 </template>
   
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts" name="MenuComponent">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonRouterOutlet } from '@ionic/vue';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { downloadOutline, peopleOutline, timeOutline, peopleCircleOutline } from 'ionicons/icons';
+import { useAuthStore } from "../stores/auth";
+import { computed } from 'vue';
 
-export default defineComponent({
-    name: 'MenuComponent',
-    components: { IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonRouterOutlet },
-    setup() {
-        return {
-            ellipse,
-            square,
-            triangle,
-        }
-    }
-});
+const authStore = useAuthStore();
+
+const isAdmin = computed(() => authStore.isAdmin);
 </script>
   

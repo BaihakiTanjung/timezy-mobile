@@ -39,11 +39,6 @@
                                         <ion-button color="primary" class="mt-12" expand="block"
                                             type="submit">Login</ion-button>
                                     </form>
-
-                                    <div class="flex justify-center mt-5">
-                                        <p class="text-sm">Belum punya akun? <a href="register">Daftar</a>s
-                                        </p>
-                                    </div>
                                 </ion-card-content>
                             </ion-card>
                         </ion-col>
@@ -55,30 +50,30 @@
 </template>
 
 <script setup lang="ts" name="LoginView">
-import { IonGrid, IonContent, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonInput, IonButton, IonIcon, IonImg } from '@ionic/vue';
+import { IonGrid, IonContent, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonInput, IonButton, IonIcon, IonImg } from '@ionic/vue';
 import { mailOutline, keyOutline } from 'ionicons/icons';
-import { useRouter } from 'vue-router';
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
+import { useAuthStore } from "../stores/auth";
 
 type Model = {
     email: string;
     password: string;
 }
 
-const router = useRouter();
+const authStore = useAuthStore();
 
 const schema = yup.object({
     email: yup.string().required().email(),
-    password: yup.string().required().min(6),
+    password: yup.string().required().min(4),
 });
 
 const { handleSubmit } = useForm<Model>({
     validationSchema: schema,
     validateOnMount: false,
     initialValues: {
-        email: 'blabla@gmail.com',
-        password: '12345678'
+        email: 'admin@hydra.project',
+        password: 'hydra'
     }
 });
 
@@ -91,9 +86,11 @@ function onInvalidSubmit({ values, errors, results }: { values: any, errors: any
     console.log(results); // a detailed map of field names and their validation results
 }
 
-const onSubmit = handleSubmit((values) => {
-    console.log(values);
-    router.push('/home');
+const onSubmit = handleSubmit(async (values) => {
+    const res = await authStore.login(values);
+    if (res?.data?.token) {
+        window.location.href = '/';
+    }
 }, onInvalidSubmit);
 
 </script>

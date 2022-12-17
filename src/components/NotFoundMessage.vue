@@ -2,7 +2,7 @@
   <div id="container">
     <strong>Halaman tidak ditemukan</strong>
     <div class="m-3">
-      <a class="text-primary" href="/home">Kembali</a>
+      <a class="text-primary" href="/">Kembali</a>
     </div>
   </div>
 </template>
